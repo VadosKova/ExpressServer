@@ -21,3 +21,14 @@ app.get('/coins/:id', async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+
+app.post('/coins', async (req, res) => {
+  try {
+    const { name, material, country, year, price } = req.body;
+    const coin = new Coin({ name, material, country, year, price });
+    await coin.save();
+    res.status(201).json(coin);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
