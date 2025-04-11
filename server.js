@@ -11,3 +11,13 @@ mongoose.connect('mongodb+srv://admin:admin@db.bdboune.mongodb.net/?retryWrites=
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
 
+
+app.get('/coins/:id', async (req, res) => {
+  try {
+    const coin = await Coin.findById(req.params.id);
+    if (!coin) return res.status(404).send('Coin not found');
+    res.json(coin);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
