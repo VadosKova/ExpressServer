@@ -32,3 +32,33 @@ app.post('/coins', async (req, res) => {
     res.status(500).send(err.message);
   }
 });
+
+app.put('/coins/:id', async (req, res) => {
+  try {
+    const { name, material, country, year, price } = req.body;
+    const coin = await Coin.findByIdAndUpdate(
+      req.params.id,
+      { name, material, country, year, price },
+      { new: true }
+    );
+    if (!coin) return res.status(404).send('Coin not found');
+    res.json(coin);
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+app.delete('/coins/:id', async (req, res) => {
+  try {
+    const coin = await Coin.findByIdAndDelete(req.params.id);
+    if (!coin) return res.status(404).send('Coin not found');
+    res.json({ message: 'Coin deleted' });
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
